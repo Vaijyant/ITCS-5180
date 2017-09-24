@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Search Words</string>
+    <string name="label">Add words to search:</string>
+    <string name="lblMatchCases">Match Cases</string>
+    <string name="lblSearch">Search</string>
+
+    <string name="tagAdd">add</string>
+    <string name="tagRemove">remove</string>
+    <string name="add_remove_icon">Add/Remove icon</string>
+
+    <string name="noresult">The word(s) do not exists.</string>
+    <string name="btnFinish">Finish</string>
+</resources>
