@@ -4,10 +4,10 @@
     android:id="@+id/tableRowLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:paddingBottom="6dp"
     android:paddingEnd="6dp"
-    android:paddingTop="6dp"
-    android:descendantFocusability="blocksDescendants">
+    android:paddingTop="6dp">
 
     <ImageView
         android:id="@+id/imageViewTrack"
@@ -56,9 +56,9 @@
         android:layout_column="2"
         android:background="?android:attr/detailsElementBackground"
         android:contentDescription="@string/favoriteIcon"
-        android:tag="off"
-        app:srcCompat="@android:drawable/btn_star_big_off"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:tag="off"
+        app:srcCompat="@android:drawable/btn_star_big_off" />
 
 </TableRow>

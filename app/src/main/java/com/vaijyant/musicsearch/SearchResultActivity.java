@@ -3,7 +3,6 @@ package com.vaijyant.musicsearch;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +15,9 @@ public class SearchResultActivity extends AppCompatActivity implements AdapterVi
 
     Track track;
     ArrayList<Track> trackArrayList;
+    ListView listView;
+    TrackAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,14 +25,16 @@ public class SearchResultActivity extends AppCompatActivity implements AdapterVi
 
         Intent intent = getIntent();
         trackArrayList = intent.getParcelableArrayListExtra("trackArrayList");
-
-        ListView listView = (ListView) findViewById(R.id.listViewResults);
-
-        TrackAdapter adapter = new TrackAdapter(this, R.layout.listitem, trackArrayList);
-
+        listView = (ListView) findViewById(R.id.listViewResults);
+        adapter = new TrackAdapter(this, R.layout.listitem, trackArrayList);
         listView.setAdapter(adapter);
         adapter.setNotifyOnChange(true);
         listView.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
     }
 
     @Override
@@ -44,7 +48,11 @@ public class SearchResultActivity extends AppCompatActivity implements AdapterVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionHome:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 finish();
+                startActivity(intent);
                 break;
             case R.id.actionQuit:
                 finishAffinity();

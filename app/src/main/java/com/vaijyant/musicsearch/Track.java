@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 
 public class Track implements Parcelable{
-    String name, artist, url, smallImageURL, largeImageURL;
+    String name, artist, url, smallImageURL, largeImageURL, mbid;
 
     public Track(){
 
@@ -19,6 +19,7 @@ public class Track implements Parcelable{
         this.url = in.readString();
         this.smallImageURL = in.readString();
         this.largeImageURL = in.readString();
+        this.mbid = in.readString();
     }
 
     public String getName() {
@@ -61,6 +62,27 @@ public class Track implements Parcelable{
         this.largeImageURL = largeImageURL;
     }
 
+    public String getMbid() {
+        return mbid;
+    }
+
+    public void setMbid(String mbid) {
+        this.mbid = mbid;
+    }
+
+    @Override
+    public String toString() {
+        String stTrack = "{" +
+                "\"name\":\"" + this.name + "\"," +
+                "\"artist\":\"" + this.artist + "\"," +
+                "\"url\":\"" + this.url + "\"," +
+                "\"smallImageURL\":\"" + this.smallImageURL + "\"," +
+                "\"largeImageURL\":\"" + this.largeImageURL + "\"," +
+                "\"mbid\":\"" + this.mbid + "\"}";
+
+        return stTrack;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -73,6 +95,7 @@ public class Track implements Parcelable{
         parcel.writeString(url);
         parcel.writeString(smallImageURL);
         parcel.writeString(largeImageURL);
+        parcel.writeString(mbid);
 
     }
     public static final Parcelable.Creator<Track> CREATOR = new Parcelable.Creator<Track>() {
