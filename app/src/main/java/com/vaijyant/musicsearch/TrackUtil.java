@@ -6,8 +6,6 @@ package com.vaijyant.musicsearch;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +21,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class TrackUtil {
     static public class TrackJSONParser {
         static ArrayList<Track> parseTracks(String in) throws JSONException {
-            Log.d("VT", "parseTracks: " + in);
 
             JSONObject root = new JSONObject(in);
             JSONArray JSONArrayTrack = null;
@@ -52,7 +49,6 @@ public class TrackUtil {
             return trackArrayList;
         }
         static ArrayList<Track> getSimilarTracks(JSONArray JSONArrayTrack) throws JSONException {
-            Log.d("PT", "getSimilarTracks: " + JSONArrayTrack.length());
             ArrayList<Track> trackArrayList = new ArrayList<Track>();
             for (int i = 0; i < JSONArrayTrack.length(); i++) {
                 JSONObject JSONObjectTrack = JSONArrayTrack.getJSONObject(i);
@@ -112,7 +108,6 @@ public class TrackUtil {
         }
         editor.putString("favourites", jsonObject);
         editor.commit();
-        Log.d("addTrackToPrefrences", "onClick: " + jsonObject);
     }
 
     static ArrayList<Track> removeTrackFromPreferences(Track track, Context mContext) throws JSONException {

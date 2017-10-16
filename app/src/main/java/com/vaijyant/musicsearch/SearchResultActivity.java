@@ -3,6 +3,7 @@ package com.vaijyant.musicsearch;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,6 +77,11 @@ public class SearchResultActivity extends AppCompatActivity implements AdapterVi
                 "&track=" + track.getName().replace(" ", "%20") +
                 "&api_key=" + apiKey +
                 "&format=json&limit=10";
+        Log.d("VT", "onItemClick: " + "http://ws.audioscrobbler.com/2.0/?" +
+                "method=track.getsimilar&artist=" + track.getArtist().replace(" ", "%20") +
+                "&track=" + track.getName().replace(" ", "%20") +
+                "&api_key=" + apiKey +
+                "&format=json&limit=10");
         new TrackAsyncTask(this).execute(url);
     }
 

@@ -77,6 +77,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSearch:
+
+                String track = ((EditText) findViewById(R.id.editTrack)).getText().toString();
+
+                if (track == null || track.length() == 0) {
+                    Toast.makeText(this, "Please provide a track name.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 REQUEST = 0;
                 String editTrack = ((EditText) findViewById(R.id.editTrack)).getText().toString();
                 String apiKey = "e4768d6dd483ddaeaf4a41154f699da4";
@@ -99,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent.putParcelableArrayListExtra("similarTrackList", trackArrayList);
             startActivity(intent);
         }
+        finish();
     }
 
     public void updateFavouriteTracks() {

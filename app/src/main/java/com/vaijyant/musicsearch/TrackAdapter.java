@@ -89,7 +89,7 @@ String TAG = "vt";
                 e.printStackTrace();
             }
             for (int i = 0; i < favourites.size(); i++) {
-                if (favourites.get(i).getName().equalsIgnoreCase(mData.get(position).getName())) {
+                if (favourites.get(i).getName().equals(mData.get(position).getName())) {
                     imgBtnFavourite.setImageResource(android.R.drawable.btn_star_big_on);
                     imgBtnFavourite.setTag("on");
                 }
