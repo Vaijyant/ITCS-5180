@@ -89,13 +89,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
 
             case R.id.actionSortPopularity:
-                Collections.sort(searchMovieList, new MovieComparator.MoviePopularityComparator());
+                Collections.sort(searchMovieList, new MovieUtil.MoviePopularityComparator());
                 adapter.notifyDataSetChanged();
                 Toast.makeText(this, "Sorted by Popularity.", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.actionSortRating:
-                Collections.sort(searchMovieList, new MovieComparator.MovieRatingComparator());
+                Collections.sort(searchMovieList, new MovieUtil.MovieRatingComparator());
                 adapter.notifyDataSetChanged();
                 Toast.makeText(this, "Sorted by Rating.", Toast.LENGTH_SHORT).show();
                 break;

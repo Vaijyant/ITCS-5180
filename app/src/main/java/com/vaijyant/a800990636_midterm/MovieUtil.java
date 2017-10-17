@@ -16,8 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import static android.content.Context.MODE_PRIVATE;
+import java.util.Comparator;
 
+import static android.content.Context.MODE_PRIVATE;
 
 public class MovieUtil {
     static public class MovieJSONParser {
@@ -66,11 +67,9 @@ public class MovieUtil {
         SharedPreferences pref = mContext.getApplicationContext().getSharedPreferences(name, MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = pref.edit();
 
-
         switch (method) {
             case "add":
                 favoriteList.add(movie);
-
                 break;
             case "remove":
                 for(int i=0; i<favoriteList.size();i++){
@@ -80,7 +79,6 @@ public class MovieUtil {
                     }
                 }
                 break;
-
             default:
                 Log.d("VT", "editSharedPreferences: Invalid option");
         }
@@ -89,5 +87,27 @@ public class MovieUtil {
         String json = gson.toJson(favoriteList);
         prefsEditor.putString("favorites", json);
         prefsEditor.commit();
+    }
+
+
+    /* =============================================================================================
+     * Movie Comparator
+     * =============================================================================================
+     */
+
+    static class MovieRatingComparator implements Comparator<Movie> {
+        public int compare(Movie movie1, Movie movie2) {
+            double rating1 = Double.parseDouble(movie1.getVote_average());
+            double rating2 = Double.parseDouble(movie2.getVote_average());
+            return rating1 == rating2 ? 0 : rating1 > rating2 ? -1 : 1;
+        }
+    }
+
+    static class MoviePopularityComparator implements Comparator<Movie> {
+        public int compare(Movie movie1, Movie movie2) {
+            double popularity1 = Double.parseDouble(movie1.getPopularity());
+            double popularity2 = Double.parseDouble(movie2.getPopularity());
+            return popularity1 == popularity2 ? 0 : popularity1 > popularity2 ? -1 : 1;
+        }
     }
 }

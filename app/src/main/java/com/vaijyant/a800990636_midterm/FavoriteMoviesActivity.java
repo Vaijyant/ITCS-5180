@@ -28,7 +28,7 @@ public class FavoriteMoviesActivity extends AppCompatActivity implements Adapter
         setContentView(R.layout.activity_favorite_movies);
 
         favoriteMovieList.clear();
-        favoriteMovieList.addAll(MovieUtil.getSharedPreferences(getBaseContext()));
+        favoriteMovieList.addAll(MovieUtil.getSharedPreferences(this));
 
         ListView listView = (ListView) findViewById(R.id.listViewFavorites);
         adapter = new MovieAdapter(this, R.layout.listitem, favoriteMovieList);
@@ -56,13 +56,13 @@ public class FavoriteMoviesActivity extends AppCompatActivity implements Adapter
                 break;
 
             case R.id.actionSortPopularity:
-                Collections.sort(favoriteMovieList, new MovieComparator.MoviePopularityComparator());
+                Collections.sort(favoriteMovieList, new MovieUtil.MoviePopularityComparator());
                 adapter.notifyDataSetChanged();
                 Toast.makeText(this, "Sorted by Popularity.", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.actionSortRating:
-                Collections.sort(favoriteMovieList, new MovieComparator.MovieRatingComparator());
+                Collections.sort(favoriteMovieList, new MovieUtil.MovieRatingComparator());
                 adapter.notifyDataSetChanged();
                 Toast.makeText(this, "Sorted by Rating.", Toast.LENGTH_SHORT).show();
                 break;
@@ -84,6 +84,5 @@ public class FavoriteMoviesActivity extends AppCompatActivity implements Adapter
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra("movie", movie);
         startActivity(intent);
-
     }
 }

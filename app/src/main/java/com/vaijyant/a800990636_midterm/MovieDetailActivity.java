@@ -25,23 +25,26 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Movie movie = intent.getParcelableExtra("movie");
 
-        ((TextView)findViewById(R.id.textViewTitle)).setText("Title: "+movie.getOriginal_title());
-        ((TextView)findViewById(R.id.textViewOverview)).setText("Overview: "+movie.getOverview());
-        ((TextView)findViewById(R.id.textViewReleaseDate)).setText("Release Date: "+movie.getRelease_date());
-        ((TextView)findViewById(R.id.textViewRating)).setText("Rating: "+movie.getVote_average());
+        String textViewTitle = "Title: "+ movie.getOriginal_title();
+        ((TextView)findViewById(R.id.textViewTitle)).setText(textViewTitle);
 
+        String textViewOverview = "Overview: "+movie.getOverview();
+        ((TextView)findViewById(R.id.textViewOverview)).setText(textViewOverview);
+
+        String textViewReleaseDate = "Release Date: "+movie.getRelease_date();
+        ((TextView)findViewById(R.id.textViewReleaseDate)).setText(textViewReleaseDate);
+
+        String textViewRating = "Rating: "+movie.getVote_average();
+        ((TextView)findViewById(R.id.textViewRating)).setText(textViewRating);
 
         ImageView imageViewMoviePoster = (ImageView)findViewById(R.id.imageViewMoviePoster);
-
         String baseUrl = "http://image.tmdb.org/t/p/w342";
-        new ImageAsyncTask().execute(baseUrl+movie.getPoster_path(), imageViewMoviePoster);
-
-
+        new GetImageAsyncTask().execute(baseUrl+movie.getPoster_path(), imageViewMoviePoster);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu_fa; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_fa, menu);
+        getMenuInflater().inflate(R.menu.menu_da, menu);
         return true;
     }
 

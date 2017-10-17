@@ -11,13 +11,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.List;
 
 /**
  * Assignment   : Midterm
  * File         : MovieAdapter.java
  * Author       : Vaijyant Tomar
- * */
+ */
 
 class MovieAdapter extends ArrayAdapter<Movie> {
     private List<Movie> mData;
@@ -42,6 +43,8 @@ class MovieAdapter extends ArrayAdapter<Movie> {
 
     @Override
     public int getItemViewType(int position) {
+        int jj=0;
+
         return position;
     }
 
@@ -60,12 +63,16 @@ class MovieAdapter extends ArrayAdapter<Movie> {
         viewMovieName.setText(movie.getOriginal_title());
 
         TextView viewReleaseDate = convertView.findViewById(R.id.viewReleaseDate);
-        String released = "Released in " + movie.getRelease_date().substring(0, 4);
+        String released;
+        if (movie.getRelease_date().length() == 0)
+            released = "Released in ####";
+        else
+            released = "Released in " + movie.getRelease_date().substring(0, 4);
         viewReleaseDate.setText(released);
 
         ImageView imageViewMovie = convertView.findViewById(R.id.imageViewMovie);
         String baseUrl = "http://image.tmdb.org/t/p/w154";
-        new ImageAsyncTask().execute(baseUrl + movie.getPoster_path(), imageViewMovie);
+        new GetImageAsyncTask().execute(baseUrl + movie.getPoster_path(), imageViewMovie);
 
         //============= Events =====================================================================
 
@@ -84,18 +91,22 @@ class MovieAdapter extends ArrayAdapter<Movie> {
 
                 if (imgBtnFavourite.getTag().equals("off")) {
 
-                    MovieUtil.editSharedPreferences(movie,"add",  mContext);
+                    MovieUtil.editSharedPreferences(movie, "add", mContext);
+
                     imgBtnFavourite.setImageResource(android.R.drawable.btn_star_big_on);
                     imgBtnFavourite.setTag("on");
+
                     Toast.makeText(mContext, movie.getOriginal_title() + " added to favorites.", Toast.LENGTH_SHORT).show();
 
                 } else if (imgBtnFavourite.getTag().equals("on")) {
 
                     imgBtnFavourite.setImageResource(android.R.drawable.btn_star_big_off);
                     imgBtnFavourite.setTag("off");
+
                     MovieUtil.editSharedPreferences(movie, "remove", mContext);
-                    if (mContext.toString().contains("FavoriteActivity") && mData != null) {
+                    if (mContext.toString().contains("FavoriteMoviesActivity") && mData != null) {
                         mData.clear();
+                        notifyDataSetChanged();
                         mData.addAll(MovieUtil.getSharedPreferences(mContext));
                     }
                     Toast.makeText(mContext, movie.getOriginal_title() + " removed from favorites.", Toast.LENGTH_SHORT).show();

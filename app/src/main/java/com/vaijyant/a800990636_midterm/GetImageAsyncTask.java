@@ -10,15 +10,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 /**
-* Homework  # Midterm
-* File Name # ImageAsyncTask.java
-* Author    # Vaijyant Tomar
+* Assignment    : Midterm
+* File Name     : GetImageAsyncTask.java
+* Author        : Vaijyant Tomar
 * */
 
-class ImageAsyncTask extends AsyncTask<Object/*input*/, Void/*progress*/, Bitmap/*result*/> {
+class GetImageAsyncTask extends AsyncTask<Object/*input*/, Void/*progress*/, Bitmap/*result*/> {
     String TAG ="VT";
     ImageView imageViewTrack;
     @Override
@@ -43,9 +44,7 @@ class ImageAsyncTask extends AsyncTask<Object/*input*/, Void/*progress*/, Bitmap
             image = BitmapFactory.decodeStream(in);
             return image;
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }catch (IOException e) {
             e.printStackTrace();
         } finally {
             if (in != null)
