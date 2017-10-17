@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Search Movies</string>
+    <string name="lblSearchMovies">Search Movies</string>
+    <string name="btnSearch">Search</string>
+    <string name="lblResults">Results</string>
+    <string name="imgDescription">Movie Thumbnail</string>
+    <string name="favoriteIcon">Favorite Icon</string>
+    <string name="actionHome">Home</string>
+    <string name="actionSortRating">Sort by Rating</string>
+    <string name="actionSortPopularity">Sort by Popularity</string>
+    <string name="actionQuit">Quit</string>
+    <string name="lblFavorites">Favorites</string>
+    <string name="lbFavorites">Favorites</string>
+    <string name="actionShowFavorites">Show Favorites</string>
+</resources>
