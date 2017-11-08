@@ -163,12 +163,12 @@ public class CreateCourseFragment extends Fragment implements AdapterView.OnItem
 
             case R.id.btnCreate:
 
-                boolean hrsIsInt = editTimeHrs.getText().toString().matches("^\\d+$");
-                boolean minIsInt = editTimeMin.getText().toString().matches("^\\d+$");
+                boolean hrsIsInt = editTimeHrs.getText().toString().matches("^[0-9]+$");
+                boolean minIsInt = editTimeMin.getText().toString().matches("^[0-9]+$");
                 int hrs = -1, min = -1;
-                if (minIsInt)
-                    hrs = Integer.parseInt(editTimeHrs.getText().toString());
                 if (hrsIsInt)
+                    hrs = Integer.parseInt(editTimeHrs.getText().toString());
+                if (minIsInt)
                     min = Integer.parseInt(editTimeMin.getText().toString());
 
                 // =================================================================================

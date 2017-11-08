@@ -60,15 +60,17 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         viewHolder.tvTitle.setText(course.getTitle());
         viewHolder.tvInstructor.setText(course.getInstructor());
 
-        String schedule = course.getSchedDay().substring(0, 3) + " "+course.getSchedTime();
+        String schedule = course.getSchedDay().substring(0, 3) + " " + course.getSchedTime();
         viewHolder.tvSchedule.setText(schedule);
 
-        byte[] outImage= course.getCourseImage();
-        ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
-        Bitmap bitmapImage = BitmapFactory.decodeStream(imageStream);
+        if (course.getCourseImage() != null) {
+            byte[] outImage = course.getCourseImage();
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
+            Bitmap bitmapImage = BitmapFactory.decodeStream(imageStream);
 
-        ImageView image = viewHolder.imgViewList;
-        image.setImageBitmap(bitmapImage);
+            ImageView image = viewHolder.imgViewList;
+            image.setImageBitmap(bitmapImage);
+        }
 
         viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -82,7 +84,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                         result.deleteAllFromRealm();
                     }
                 });
-                Toast.makeText(activity, "Course \'"+course.getTitle()+"\' deleted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Course \'" + course.getTitle() + "\' deleted.", Toast.LENGTH_SHORT).show();
                 courseList.remove(i);
                 notifyDataSetChanged();
 

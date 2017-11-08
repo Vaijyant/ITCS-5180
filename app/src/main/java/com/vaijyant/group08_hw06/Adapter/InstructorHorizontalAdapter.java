@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
 import com.vaijyant.group08_hw06.Models.Instructor;
 import com.vaijyant.group08_hw06.R;
 
@@ -43,10 +44,11 @@ public class InstructorHorizontalAdapter extends RecyclerView.Adapter<Instructor
         this.activity = activity;
     }
 
-    public void setClickedInstructor(Instructor instructor){
+    public void setClickedInstructor(Instructor instructor) {
         clickedInstructor = instructor;
     }
-    public Instructor getClickedInstructor(){
+
+    public Instructor getClickedInstructor() {
 
         return clickedInstructor;
     }
@@ -54,7 +56,7 @@ public class InstructorHorizontalAdapter extends RecyclerView.Adapter<Instructor
 
     public InstructorHorizontalAdapter(ArrayList<Instructor> instructorList) {
         this.instructorList = instructorList;
-        lastClickPosition  = -1;
+        lastClickPosition = -1;
         clickedInstructor = null;
     }
 
@@ -73,16 +75,14 @@ public class InstructorHorizontalAdapter extends RecyclerView.Adapter<Instructor
         final Instructor instructor = instructorList.get(i);
         viewHolder.lblInstructorName.setText(instructor.getFirstName() + " " + instructor.getLastName());
 
-        byte[] outImage = instructor.getInstructorImage();
-        ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
-        Bitmap bitmapImage = BitmapFactory.decodeStream(imageStream);
+        if (instructor.getInstructorImage() != null) {
+            byte[] outImage = instructor.getInstructorImage();
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
+            Bitmap bitmapImage = BitmapFactory.decodeStream(imageStream);
 
-        ImageView image = viewHolder.imageView;
-        image.setImageBitmap(bitmapImage);
-
-
-
-
+            ImageView image = viewHolder.imageView;
+            image.setImageBitmap(bitmapImage);
+        }
     }
 
     @Override

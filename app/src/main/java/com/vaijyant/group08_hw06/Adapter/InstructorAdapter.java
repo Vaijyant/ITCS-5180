@@ -60,13 +60,14 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.In
         viewHolder.tvName.setText(instructor.getFirstName() + " " + instructor.getLastName());
         viewHolder.tvEmail.setText(instructor.getEmail());
 
+        if(instructor.getInstructorImage() != null) {
+            byte[] outImage = instructor.getInstructorImage();
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
+            Bitmap bitmapImage = BitmapFactory.decodeStream(imageStream);
 
-        byte[] outImage = instructor.getInstructorImage();
-        ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
-        Bitmap bitmapImage = BitmapFactory.decodeStream(imageStream);
-
-        ImageView image = viewHolder.imgViewList;
-        image.setImageBitmap(bitmapImage);
+            ImageView image = viewHolder.imgViewList;
+            image.setImageBitmap(bitmapImage);
+        }
 
         viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
