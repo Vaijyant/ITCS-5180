@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vaijyant.group08_hw06.LoginFragment">
+    tools:context="com.vaijyant.group08_hw06.Fragments.LoginFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

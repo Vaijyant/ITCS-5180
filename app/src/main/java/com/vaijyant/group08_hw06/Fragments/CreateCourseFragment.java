@@ -1,4 +1,4 @@
-package com.vaijyant.group08_hw06;
+package com.vaijyant.group08_hw06.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,14 +17,15 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.vaijyant.group08_hw06.Adapter.InstructorHorizontalAdapter;
 import com.vaijyant.group08_hw06.Models.Course;
 import com.vaijyant.group08_hw06.Models.Instructor;
+import com.vaijyant.group08_hw06.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 
 public class CreateCourseFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener{

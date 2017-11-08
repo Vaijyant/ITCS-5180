@@ -1,4 +1,4 @@
-package com.vaijyant.group08_hw06;
+package com.vaijyant.group08_hw06.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.vaijyant.group08_hw06.MainActivity;
 import com.vaijyant.group08_hw06.Models.User;
+import com.vaijyant.group08_hw06.R;
 
 import io.realm.Realm;
 

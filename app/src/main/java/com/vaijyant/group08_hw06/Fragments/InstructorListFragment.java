@@ -1,4 +1,4 @@
-package com.vaijyant.group08_hw06;
+package com.vaijyant.group08_hw06.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import com.vaijyant.group08_hw06.Adapter.InstructorAdapter;
 import com.vaijyant.group08_hw06.Models.Instructor;
+import com.vaijyant.group08_hw06.R;
+
 import java.util.ArrayList;
 
 import io.realm.Realm;

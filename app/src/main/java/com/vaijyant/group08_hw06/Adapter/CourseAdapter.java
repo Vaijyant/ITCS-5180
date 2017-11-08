@@ -1,4 +1,4 @@
-package com.vaijyant.group08_hw06;
+package com.vaijyant.group08_hw06.Adapter;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vaijyant.group08_hw06.Models.Course;
+import com.vaijyant.group08_hw06.R;
 
 
 import java.io.ByteArrayInputStream;

@@ -1,4 +1,4 @@
-package com.vaijyant.group08_hw06;
+package com.vaijyant.group08_hw06.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,8 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.vaijyant.group08_hw06.Adapter.CourseAdapter;
 import com.vaijyant.group08_hw06.Models.Course;
-import com.vaijyant.group08_hw06.Models.Instructor;
+import com.vaijyant.group08_hw06.R;
 
 import java.util.ArrayList;
 

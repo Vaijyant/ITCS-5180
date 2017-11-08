@@ -1,4 +1,4 @@
-package com.vaijyant.group08_hw06;
+package com.vaijyant.group08_hw06.Adapter;
 
 
 import android.app.Activity;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import com.vaijyant.group08_hw06.Models.Instructor;
+import com.vaijyant.group08_hw06.R;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;

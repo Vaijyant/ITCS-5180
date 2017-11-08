@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vaijyant.group08_hw06.CourseManagerFragment">
+    tools:context="com.vaijyant.group08_hw06.Fragments.CourseManagerFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

@@ -7,6 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.vaijyant.group08_hw06.Fragments.AddInstructorFragment;
+import com.vaijyant.group08_hw06.Fragments.CourseManagerFragment;
+import com.vaijyant.group08_hw06.Fragments.CreateCourseFragment;
+import com.vaijyant.group08_hw06.Fragments.InstructorListFragment;
+import com.vaijyant.group08_hw06.Fragments.LoginFragment;
+import com.vaijyant.group08_hw06.Fragments.RegisterFragment;
 import com.vaijyant.group08_hw06.Models.Course;
 import com.vaijyant.group08_hw06.Models.Instructor;
 import com.vaijyant.group08_hw06.Models.User;
