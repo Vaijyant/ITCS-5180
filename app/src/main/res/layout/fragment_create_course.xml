@@ -114,8 +114,9 @@
 
             <Spinner
                 android:id="@+id/spinTime"
-                android:layout_width="30dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0.27" />
         </LinearLayout>
 
