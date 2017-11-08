@@ -1,0 +1,62 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vaijyant.group08_hw06.RegisterFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/imgBtnRegister"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="?android:attr/colorBackground"
+            android:scaleType="fitXY"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+        <EditText
+            android:id="@+id/editRegFirstName"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/hintFirstName"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editRegLastName"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/hintLastName"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editRegUserName"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/hintUserName"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editRegPassword"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/hintRegPassword"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btnRegister" />
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/actionHome"
+        android:title="@string/actionHome"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/actionInstructors"
+        android:title="@string/actionInstructors"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/actionAddInstructors"
+        android:title="@string/actionAddInstructors"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/actionLogout"
+        android:title="@string/actionLogout"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/actionExit"
+        android:title="@string/actionExit"
+        app:showAsAction="collapseActionView" />
+</menu>
