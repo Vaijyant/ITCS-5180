@@ -3,6 +3,7 @@ package com.vaijyant.group08_hw06;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.vaijyant.group08_hw06.Models.Instructor;
 import com.vaijyant.group08_hw06.Models.User;
 
 import io.realm.Realm;
+import io.realm.exceptions.RealmPrimaryKeyConstraintException;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -69,15 +71,16 @@ public class MainActivity extends AppCompatActivity
                             .replace(R.id.container, new CourseManagerFragment(), "home")
                             .commit();
                 } else {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, new LoginFragment(), "login")
+                            .commit();
                     Toast.makeText(this, "Please login before proceeding.", Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.actionInstructors:
                 if (LOGGED_IN) {
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.container, new InstructorListFragment(), "instructor_list")
-                            .commit();
+                    gotoInstructorFragment();
                 } else {
                     Toast.makeText(this, "Please login before proceeding.", Toast.LENGTH_SHORT).show();
                 }
@@ -123,7 +126,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void gotoRegisterFragment() {
         setTitle("Register");
-        LOGGED_IN = true;
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, new RegisterFragment(), "register")
                 .commit();
@@ -152,7 +154,8 @@ public class MainActivity extends AppCompatActivity
                     LOGGED_IN = true;
                     Toast.makeText(MainActivity.this, "Logged in as " + user.getUserName() + ".", Toast.LENGTH_SHORT).show();
                     gotoCourseManager();
-                } catch (Exception e) {
+                } catch (RealmPrimaryKeyConstraintException e) {
+                    Log.d("Realm Exception: ", e.toString());
                     Toast.makeText(MainActivity.this, "User exists. Please select another username.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -182,8 +185,8 @@ public class MainActivity extends AppCompatActivity
                 try {
                     realm.copyToRealm(instructor);
                     Toast.makeText(MainActivity.this, "Instructor added.", Toast.LENGTH_SHORT).show();
-                    gotoCourseManager();
-                } catch (Exception e) {
+                    gotoInstructorFragment();
+                } catch (RealmPrimaryKeyConstraintException e) {
                     Toast.makeText(MainActivity.this, "Instructor with same email exists." +
                             "Contact support.", Toast.LENGTH_SHORT).show();
                 }
@@ -203,7 +206,7 @@ public class MainActivity extends AppCompatActivity
                     realm.copyToRealm(course);
                     Toast.makeText(MainActivity.this, "Course added.", Toast.LENGTH_SHORT).show();
                     gotoCourseManager();
-                } catch (Exception e) {
+                } catch (RealmPrimaryKeyConstraintException e) {
                     Toast.makeText(MainActivity.this, "Course with same title exists. " +
                             "Please select a different title.", Toast.LENGTH_SHORT).show();
                 }
@@ -214,7 +217,9 @@ public class MainActivity extends AppCompatActivity
      * Instructor List Fragment Methods
      * */
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void gotoInstructorFragment() {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new InstructorListFragment(), "instructor_list")
+                .commit();
     }
 }

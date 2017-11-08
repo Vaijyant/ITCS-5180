@@ -45,7 +45,7 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.In
         this.activity = activity;
     }
 
-    InstructorAdapter(ArrayList<Instructor> instructorList) {
+    public InstructorAdapter(ArrayList<Instructor> instructorList) {
         this.instructorList = instructorList;
     }
 

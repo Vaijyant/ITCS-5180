@@ -52,7 +52,7 @@ public class InstructorHorizontalAdapter extends RecyclerView.Adapter<Instructor
     }
 
 
-    InstructorHorizontalAdapter(ArrayList<Instructor> instructorList) {
+    public InstructorHorizontalAdapter(ArrayList<Instructor> instructorList) {
         this.instructorList = instructorList;
         lastClickPosition  = -1;
         clickedInstructor = null;

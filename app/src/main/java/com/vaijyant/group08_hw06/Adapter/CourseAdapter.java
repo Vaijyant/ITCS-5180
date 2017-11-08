@@ -45,7 +45,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         this.activity = activity;
     }
 
-    CourseAdapter(ArrayList<Course> courseList) {
+    public CourseAdapter(ArrayList<Course> courseList) {
         this.courseList = courseList;
     }
 

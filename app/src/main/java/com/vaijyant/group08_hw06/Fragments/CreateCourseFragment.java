@@ -215,7 +215,7 @@ public class CreateCourseFragment extends Fragment implements AdapterView.OnItem
 
                 mListener.addCourse(course);
 
-                Toast.makeText(getActivity(), "New course" + course.getTitle() + "created.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "New course \'" + course.getTitle() + "\' created.", Toast.LENGTH_SHORT).show();
                 resetCreateCourseFragment();
                 break;
         }

@@ -96,6 +96,6 @@ public class InstructorListFragment extends Fragment implements View.OnClickList
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void gotoInstructorFragment();
     }
 }
