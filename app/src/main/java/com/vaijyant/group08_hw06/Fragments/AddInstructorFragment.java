@@ -120,18 +120,18 @@ public class AddInstructorFragment extends Fragment implements View.OnClickListe
     }
 
     public void imageSelectorAlert() {
-        final CharSequence[] items = {  "Take Photo",
-                                        "Choose from Library",
-                                        "Cancel"};
+        final CharSequence[] items = {"Take Photo",
+                "Choose from Gallery",
+                "Cancel"};
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 Intent intent;
-                switch (item){
+                switch (item) {
                     case 0:
-                        intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(intent, CAMERA_REQUEST);
                         break;
                     case 1:
@@ -150,9 +150,26 @@ public class AddInstructorFragment extends Fragment implements View.OnClickListe
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         photo = null;
-        if ((requestCode == CAMERA_REQUEST || requestCode == GALLERY_REQUEST) && resultCode == Activity.RESULT_OK) {
-            photo = (Bitmap) data.getExtras().get("data");
-            ((ImageButton) getView().findViewById(R.id.imgBtnRegister_ai)).setImageBitmap(photo);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case CAMERA_REQUEST:
+                    photo = (Bitmap) data.getExtras().get("data");
+                    ((ImageButton) getView().findViewById(R.id.imgBtnRegister_ai)).setImageBitmap(photo);
+                    break;
+                case GALLERY_REQUEST:
+                    Uri selectedImage = data.getData();
+                    try {
+                        photo = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        photo.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+
+                        ((ImageButton) getView().findViewById(R.id.imgBtnRegister_ai)).setImageBitmap(photo);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
         }
     }
 
