@@ -88,14 +88,16 @@
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
                 android:text="@string/lblTime" />
 
             <EditText
                 android:id="@+id/editTimeHrs"
-                android:layout_width="30dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -105,10 +107,11 @@
 
             <EditText
                 android:id="@+id/editTimeMin"
-                android:layout_width="30dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <Spinner
                 android:id="@+id/spinTime"
