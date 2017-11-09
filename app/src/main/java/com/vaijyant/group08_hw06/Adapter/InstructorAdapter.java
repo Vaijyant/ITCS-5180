@@ -81,7 +81,7 @@ public class InstructorAdapter extends RecyclerView.Adapter<InstructorAdapter.In
                         result.deleteAllFromRealm();
                     }
                 });
-                Toast.makeText(activity, "Course \'" + instructor.getFirstName() + " " + instructor.getLastName() + "\' deleted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Instructor \'" + instructor.getFirstName() + " " + instructor.getLastName() + "\' deleted.", Toast.LENGTH_SHORT).show();
                 instructorList.remove(i);
                 notifyDataSetChanged();
 

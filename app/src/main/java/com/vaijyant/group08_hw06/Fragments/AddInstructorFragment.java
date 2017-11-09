@@ -107,7 +107,7 @@ public class AddInstructorFragment extends Fragment implements View.OnClickListe
                     Toast.makeText(getActivity(), "Please specify personal website picture.", Toast.LENGTH_SHORT).show();
                     valid = false;
                 } else if (!Patterns.WEB_URL.matcher(personalWebsite).matches()) {
-                    Toast.makeText(getActivity(), "Please specify personal website picture.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Invalid URL format.", Toast.LENGTH_SHORT).show();
                     valid = false;
                 }
 

@@ -184,7 +184,8 @@ public class MainActivity extends AppCompatActivity
             public void execute(Realm realm) {
                 try {
                     realm.copyToRealm(instructor);
-                    Toast.makeText(MainActivity.this, "Instructor added.", Toast.LENGTH_SHORT).show();
+                    String name = instructor.getFirstName() + " " + instructor.getLastName();
+                    Toast.makeText(MainActivity.this, "Instructor \'" + name + "\' added.", Toast.LENGTH_SHORT).show();
                     gotoInstructorFragment();
                 } catch (RealmPrimaryKeyConstraintException e) {
                     Toast.makeText(MainActivity.this, "Instructor with same email exists." +
@@ -213,6 +214,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
     /***********************************************************************************************
      * Instructor List Fragment Methods
      * */
