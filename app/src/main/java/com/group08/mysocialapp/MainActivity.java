@@ -12,7 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -20,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
+import static com.group08.mysocialapp.FireBaseManager.createAccount;
 import static com.group08.mysocialapp.FireBaseManager.validLogin;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -119,6 +122,34 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 break;
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case RC_SIGN_IN:
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                handleSignInResult(result);
+                break;
+        }
+    }
+
+    void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult: " + result.isSuccess());
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+
+            if(!FireBaseManager.googleAcctExist(acct)){
+                createAccount(acct);
+            }
+            Intent intent = new Intent(this, HomeScreenActivity.class);
+            startActivity(intent);
+
+            Toast.makeText(this, ""+acct.getEmail(), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
