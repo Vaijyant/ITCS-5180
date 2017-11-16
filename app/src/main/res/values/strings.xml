@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My Social App</string>
+    <string name="btnLogin">Login</string>
+    <string name="lblNotAMember">Not a member?</string>
+    <string name="lblSignUp">Sign Up</string>
+    <string name="btnSignInWithGoogle">Sign in With Google</string>
+</resources>
