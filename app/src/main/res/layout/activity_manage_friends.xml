@@ -52,11 +52,13 @@
             android:text="@string/tabItemFriends" />
 
         <android.support.design.widget.TabItem
+            android:id="@+id/tabItemAddNewFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tabItemAddNewFriend" />
 
         <android.support.design.widget.TabItem
+            android:id="@+id/tabItemRequestsPending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lblRequestsPending" />
