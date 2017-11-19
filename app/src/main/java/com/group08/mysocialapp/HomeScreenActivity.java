@@ -93,7 +93,7 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mUsername = mFirebaseUser.getDisplayName();
 
-        Toast.makeText(this, "Signed in as " + mFirebaseUser.getEmail() + ".", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Signed in as " + mFirebaseUser.getEmail() + ".", Toast.LENGTH_SHORT).show();
 
         //Initialize GUI Component
         lblFirstName = (TextView) findViewById(R.id.lblFirstName);
@@ -274,7 +274,6 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
-        menu.findItem(R.id.actionBtn).setIcon(R.drawable.logout);
         return true;
     }
 
@@ -293,16 +292,6 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-
-                    }
-                });
     }
 
 }
