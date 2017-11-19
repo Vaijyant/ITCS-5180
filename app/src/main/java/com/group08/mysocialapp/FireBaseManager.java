@@ -1,8 +1,8 @@
 package com.group08.mysocialapp;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.group08.mysocialapp.Models.Post;
 import com.group08.mysocialapp.Models.User;
 
 /**
@@ -11,31 +11,21 @@ import com.group08.mysocialapp.Models.User;
 
 public class FireBaseManager {
 
-    static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    static DatabaseReference mDatabaseReference;
 
-    static boolean googleAcctExist(GoogleSignInAccount acct) {
+    static String TAG = "VT";
 
+    public static void createApplicationUser(User user) {
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+        String id = user.getId();
+        user.setId("");
+        mDatabaseReference.child(id).setValue(user);
 
-        return false;
     }
 
-    static boolean validLogin(String username, String password) {
+    public static void publishPost(Post post) {
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("posts");
+        mDatabaseReference.push().setValue(post);
 
-
-        return false;
-    }
-
-    static void createAccount(GoogleSignInAccount acct) {
-        User user = new User();
-        user.setFirstName(acct.getGivenName());
-        user.setLastName(acct.getFamilyName());
-        user.setEmail(acct.getEmail());
-
-        createUser(user);
-    }
-
-    static void createUser(User user) {
-        user.set_id(mDatabase.child("users").push().getKey());
-        mDatabase.child("users").child(user.get_id()).setValue(user);
     }
 }

@@ -1,24 +1,37 @@
 package com.group08.mysocialapp.Models;
 
+import java.io.Serializable;
+
 /**
  * Created by vaijy on 2017-11-16.
  */
 
-public class User {
+public class User implements Serializable {
 
-    String _id;
-    String email;
-    String firstName;
-    String lastName;
-    String dateOfBirth;
-    String password;
+    private String id;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String dateOfBirth;
+    private String password;
 
-    public String get_id() {
-        return _id;
+    public User() {
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public User(String email, String firstName, String lastName, String dateOfBirth, String password) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.password = password;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -59,5 +72,17 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "\"id\": \"" + id + '\"' +
+                ", \"email\": \"" + email + '\"' +
+                ", \"firstName\": \"" + firstName + '\"' +
+                ", \"lastName\": \"" + lastName + '\"' +
+                ", \"dateOfBirth\": \"" + dateOfBirth + '\"' +
+                ", \"password\": \"" + password + '\"' +
+                '}';
     }
 }

@@ -6,4 +6,5 @@
     <string name="btnSignInWithGoogle">Sign in With Google</string>
     <string name="lblSignUp_sua">Hi, New User!</string>
     <string name="btnSignUp_sua">Sign Up!</string>
+    <string name="lblPosts">Posts</string>
 </resources>
