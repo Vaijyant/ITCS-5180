@@ -219,6 +219,7 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
         imgBtnFriendsList.setOnClickListener(this);
         imgBtnPost.setOnClickListener(this);
         editPost.setOnClickListener(this);
+        lblFirstName.setOnClickListener(this);
 
     }
 
@@ -237,6 +238,8 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.lblFirstName:
+                break;
             case R.id.imgBtnFriendsList:
                 Intent intent = new Intent(this, ManageFriendsActivity.class);
                 finish();

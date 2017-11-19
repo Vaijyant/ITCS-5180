@@ -7,4 +7,8 @@
     <string name="lblSignUp_sua">Hi, New User!</string>
     <string name="btnSignUp_sua">Sign Up!</string>
     <string name="lblPosts">Posts</string>
+    <string name="lblFriends">Friends</string>
+    <string name="tabItemFriends">Friends</string>
+    <string name="tabItemAddNewFriend">Add New Friend</string>
+    <string name="lblRequestsPending">Requests Pending</string>
 </resources>
