@@ -1,6 +1,7 @@
 package com.group08.mysocialapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.group08.mysocialapp.Models.User;
 
 import java.text.DateFormat;
@@ -30,6 +32,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
+
+    String TAG = "vt";
 
     //GUI Components
     EditText editFirstName;
@@ -181,9 +185,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    FirebaseUser createdUser = FirebaseAuth.getInstance().getCurrentUser();
-                    FirebaseAuth.getInstance().signOut();
-
+                    final FirebaseUser createdUser = FirebaseAuth.getInstance().getCurrentUser();
 
                     //Save user to database
                     User firebaseUser = new User();
@@ -194,13 +196,31 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     firebaseUser.setDateOfBirth(user.getDateOfBirth());
                     firebaseUser.setPassword(user.getPassword());
 
-                    FireBaseManager.createApplicationUser(firebaseUser);
+                    // Saving in Application - Database
+                    FireBaseManager.createUpdateApplicationUser(firebaseUser);
 
-                    //Update GUI
-                    Toast.makeText(SignUpActivity.this, "You are all set " + user.getFirstName() + "! Login to continue.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                    finish();
-                    startActivity(intent);
+
+                    // Updating created user in Firebase Authentication
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(user.getFirstName() + " " + user.getLastName())
+                            .build();
+
+                    createdUser.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "User profile updated. id: " + createdUser.getUid());
+
+                                        //Update GUI
+                                        Toast.makeText(SignUpActivity.this, "You are all set " + createdUser.getDisplayName() + "! Login to continue.", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                                        finish();
+                                        FirebaseAuth.getInstance().signOut();
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
 
 
                 } else {

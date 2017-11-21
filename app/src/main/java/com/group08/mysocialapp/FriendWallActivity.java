@@ -12,14 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-
 import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -27,10 +24,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.group08.mysocialapp.Models.Post;
 import com.group08.mysocialapp.Models.User;
 
@@ -40,92 +35,68 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class HomeScreenActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class FriendWallActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
-
+    //GUI Components
     TextView lblFirstName;
-    ImageButton imgBtnFriendsList;
-    ImageButton imgBtnPost;
-    EditText editPost;
-    RecyclerView rvPosts_hsa;
-    LinearLayoutManager mLinearLayoutManager;
+    ImageButton imgBtnHome;
+    TextView lblPost;
+    RecyclerView rvPosts_fwa;
 
+
+    //Other Stuff
+    String TAG = "VT";
 
     GoogleApiClient mGoogleApiClient;
 
-    String TAG = "VT";
+    //Recycler View
+    LinearLayoutManager mLinearLayoutManager;
 
     // Firebase instance variables
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Post, PostViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Post, FriendPostViewHolder> mFirebaseAdapter;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
-
-    public static User currentUser;
     private String mUsername;
+
+    User friend;
 
     // Holder Class ================================================================================
     // =============================================================================================
-    public static class PostViewHolder extends RecyclerView.ViewHolder {
+    public static class FriendPostViewHolder extends RecyclerView.ViewHolder {
         TextView lblPostUserFirstName;
         TextView lblPostTime;
         TextView lblPostMessage;
+        ImageButton imgBtnDelete;
 
-        public PostViewHolder(View v) {
+        public FriendPostViewHolder(View v) {
             super(v);
             lblPostUserFirstName = (TextView) itemView.findViewById(R.id.lblPostUserFirstName);
             lblPostTime = (TextView) itemView.findViewById(R.id.lblPostTime);
             lblPostMessage = (TextView) itemView.findViewById(R.id.lblPostMessage);
+            imgBtnDelete = (ImageButton) itemView.findViewById(R.id.imgBtnDelete);
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseDatabaseReference.child("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    if (userSnapshot.getKey().equals(FirebaseAuth.getInstance().getUid())) {
-                        currentUser = userSnapshot.getValue(User.class);
-                        currentUser.setId(userSnapshot.getKey());
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
+        setContentView(R.layout.activity_friend_wall);
 
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Intent intent = getIntent();
+        friend = (User) intent.getSerializableExtra("friend");
 
-        //Toast.makeText(this, "Signed in as " + mFirebaseUser.getEmail() + ".", Toast.LENGTH_SHORT).show();
+        //Initialize GUI
+        lblFirstName = findViewById(R.id.lblFirstName);
+        imgBtnHome = findViewById(R.id.imgBtnHome_fwa);
+        lblPost = findViewById(R.id.lblPost_fwa);
+        rvPosts_fwa = findViewById(R.id.rvPosts_fwa);
 
-        //Initialize GUI Component
-        lblFirstName = (TextView) findViewById(R.id.lblFirstName);
-        imgBtnFriendsList = (ImageButton) findViewById(R.id.imgBtnFriendsList);
-        editPost = (EditText) findViewById(R.id.editPost);
-        imgBtnPost = (ImageButton) findViewById(R.id.imgBtnPost);
-        rvPosts_hsa = (RecyclerView) findViewById(R.id.rvPosts_hsa);
-
-        String firstName = mFirebaseUser.getDisplayName().split(" ")[0];
-        lblFirstName.setText(firstName);
-
+        lblFirstName.setText(friend.getFirstName());
+        lblPost.setText(friend.getFirstName() + "\'s Posts");
 
         //Sign out
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -133,13 +104,13 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-        Log.d(TAG, "before recycler view: ");
 
         // Initialize RecyclerView.
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setReverseLayout(true);
         mLinearLayoutManager.setStackFromEnd(true);
-        rvPosts_hsa.setLayoutManager(mLinearLayoutManager);
+        rvPosts_fwa.setLayoutManager(mLinearLayoutManager);
+        rvPosts_fwa.setHasFixedSize(false);
 
 
         // Parser ==================================================================================
@@ -151,7 +122,10 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
             public Post parseSnapshot(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "parseSnapshot: " + dataSnapshot);
                 Post post = dataSnapshot.getValue(Post.class);
+
                 return post;
+
+
             }
         };
 
@@ -163,16 +137,22 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
 
 
         // class Adapter begins
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Post, PostViewHolder>(options) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Post, FriendPostViewHolder>(options) {
             @Override
-            public PostViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public FriendPostViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
                 LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-                return new PostViewHolder(inflater.inflate(R.layout.item_post, viewGroup, false));
+                return new FriendPostViewHolder(inflater.inflate(R.layout.item_post, viewGroup, false));
             }
 
             @Override
-            protected void onBindViewHolder(final PostViewHolder viewHolder, int position, Post post) {
+            protected void onBindViewHolder(final FriendPostViewHolder viewHolder, int position, final Post post) {
                 Log.d(TAG, "onBindViewHolder: " + position);
+
+                if(!post.getUserId().equals(friend.getId())){
+                    viewHolder.itemView.setVisibility(View.GONE);
+                    return;
+                }
+
                 viewHolder.lblPostUserFirstName.setText(post.getFirstName());
                 viewHolder.lblPostTime.setText(getPrettyDate(post.getPostingTime()));
                 viewHolder.lblPostMessage.setText(post.getPost());
@@ -197,16 +177,12 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
             }
         };
 
-        rvPosts_hsa.setAdapter(mFirebaseAdapter);
-
+        rvPosts_fwa.setAdapter(mFirebaseAdapter);
+        Log.d(TAG, "onCreate: rvPosts_fwa adapter set");
         //Adapter stuff ends =======================================================================
 
-
-        //Attach Listeners
-        imgBtnFriendsList.setOnClickListener(this);
-        imgBtnPost.setOnClickListener(this);
-        editPost.setOnClickListener(this);
-        lblFirstName.setOnClickListener(this);
+        //Attach Events
+        imgBtnHome.setOnClickListener(this);
 
     }
 
@@ -225,37 +201,14 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.lblFirstName:
-                break;
-            case R.id.imgBtnFriendsList:
-                Intent intent = new Intent(this, ManageFriendsActivity.class);
-                finish();
+            case R.id.imgBtnHome_fwa:
+                Intent intent = new Intent(this, HomeScreenActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.imgBtnPost:
-                String postText = editPost.getText().toString().trim();
-                if (postText.length() == 0) {
-                    Toast.makeText(this, "Please write a message to post.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Post post = new Post();
-                post.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName().split(" ")[0]);
-                post.setPostingTime((new Date()).toString());
-                post.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                post.setPost(postText);
-                editPost.setText("");
-
-                FireBaseManager.publishPost(post);
-                break;
         }
-    }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
 
     //Menu code ====================================================================================
 
@@ -282,6 +235,10 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
                 return super.onOptionsItemSelected(item);
         }
     }
-    //Menu End= ====================================================================================
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+    //Menu End= ====================================================================================
 }

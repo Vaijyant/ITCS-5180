@@ -2,7 +2,6 @@ package com.group08.mysocialapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -23,24 +23,24 @@ import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.group08.mysocialapp.Models.Post;
+import com.group08.mysocialapp.Models.User;
 
-import org.ocpsoft.prettytime.PrettyTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.group08.mysocialapp.Adapters.*;
 
 public class ManageFriendsActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG ="VT" ;
+    private static final String TAG = "VT";
     // GUI components
     ImageButton imgBtnHome_mfa;
     TabHost mTabHost;
@@ -53,15 +53,23 @@ public class ManageFriendsActivity extends AppCompatActivity implements View.OnC
 
     // Firebase
     DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Post, TabFriendsViewHolder> mFirebaseAdapterTabFriends;
-    private FirebaseRecyclerAdapter<Post, TabAddNewFriendsViewHolder> mFirebaseAdapterTabAddNewFriends;
-    private FirebaseRecyclerAdapter<Post, TabRequestsPending> mFirebaseAdapterTabRequestsPending;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private GoogleApiClient mGoogleApiClient;
     private String mUsername;
     private FirebaseUser mFirebaseUser;
+
+
+    // Adapters
+    TabFriendsAdapter tabFriendsAdapter;
+    TabAddNewFriendsAdapter tabAddNewFriendsAdapter;
+    TabRequestsPendingAdapter tabRequestsPendingAdapter;
+
+    // adapter lists
+    static ArrayList<User> userList1;
+    static ArrayList<User> userList2;
+    static ArrayList<User> userList3;
 
 
     @Override
@@ -75,11 +83,10 @@ public class ManageFriendsActivity extends AppCompatActivity implements View.OnC
         //Initialize GUI components
         imgBtnHome_mfa = findViewById(R.id.imgBtnHome_mfa);
         rvTabFriends = findViewById(R.id.rvTabFriends);
-        rvTabAddNewFriends = findViewById(R.id.rvTabAddNewFriends);
-        rvTabRequestsPending = findViewById(R.id.rvTabRequestsPending);
+
 
         //initialize tabs
-        mTabHost = (TabHost)findViewById(R.id.tabHost);
+        mTabHost = (TabHost) findViewById(R.id.tabHost);
         mTabHost.setup();
         initializeTab1();
         initializeTab2();
@@ -124,7 +131,7 @@ public class ManageFriendsActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.imgBtnHome_mfa:
                 Intent intent = new Intent(this, HomeScreenActivity.class);
                 startActivity(intent);
@@ -140,247 +147,182 @@ public class ManageFriendsActivity extends AppCompatActivity implements View.OnC
 
 
     // Initializing tabs ===========================================================================
-    void initializeTab1(){
+    void initializeTab1() {
         String heading = "Friends";
         TabHost.TabSpec mSpec = mTabHost.newTabSpec(heading);
         mSpec.setContent(R.id.tabFriends);
         mSpec.setIndicator(heading);
         mTabHost.addTab(mSpec);
 
+        userList1 = new ArrayList<>();
         // Initialize RecyclerView.
+        rvTabFriends = findViewById(R.id.rvTabFriends);
+        rvTabFriends.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setReverseLayout(true);
-        mLinearLayoutManager.setStackFromEnd(true);
+        //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        tabFriendsAdapter = new TabFriendsAdapter(userList1);
+        tabFriendsAdapter.setActivity(this);
+       /* mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);*/
+        rvTabFriends.setAdapter(tabFriendsAdapter);
         rvTabFriends.setLayoutManager(mLinearLayoutManager);
 
-
-        // Parser ==================================================================================
-        // New child entries
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        Log.d(TAG, "onCreate: " + mFirebaseDatabaseReference);
-        SnapshotParser<Post> parser = new SnapshotParser<Post>() {
+        mFirebaseDatabaseReference.child("users").addValueEventListener(new ValueEventListener() {
             @Override
-            public Post parseSnapshot(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "parseSnapshot: " + dataSnapshot);
-                Post post = dataSnapshot.getValue(Post.class);
-                return post;
-            }
-        };
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User currentUser = HomeScreenActivity.currentUser;
 
-        // Adapter Class ===========================================================================
-        DatabaseReference postsRef = mFirebaseDatabaseReference.child("posts");
-        FirebaseRecyclerOptions<Post> options = new FirebaseRecyclerOptions.Builder<Post>()
-                .setQuery(postsRef, parser)
-                .build();
+                List<String> friends = new ArrayList<String>();
+                if (currentUser.getFriends() != null) {
+                    friends.addAll(currentUser.getFriends());
+                }
+
+                userList1.clear();
+                tabFriendsAdapter.notifyDataSetChanged();
 
 
-        // class Adapter begins
-        mFirebaseAdapterTabFriends = new FirebaseRecyclerAdapter<Post, TabFriendsViewHolder>(options) {
-            @Override
-            public TabFriendsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-                return new TabFriendsViewHolder(inflater.inflate(R.layout.tab_friends_item, viewGroup, false));
-            }
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    User snapUser = userSnapshot.getValue(User.class);
+                    snapUser.setId(userSnapshot.getKey());
 
-            @Override
-            protected void onBindViewHolder(final TabFriendsViewHolder viewHolder, int position, Post post) {
-                Log.d(TAG, "onBindViewHolder: " + position);
-                viewHolder.lblFriendName_tab1.setText("");
-                viewHolder.imgBtnRemoveFriend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    String id;
+                    id = userSnapshot.getKey();
 
+                    if (friends.contains(snapUser.getId())) {
+                        userList1.add(snapUser);
+                        tabFriendsAdapter.notifyDataSetChanged();
                     }
-                });
-                viewHolder.lblFriendName_tab1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
+                }
             }
-        };
-        rvTabFriends.setAdapter(mFirebaseAdapterTabFriends);
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
-    void initializeTab2(){
+    void initializeTab2() {
+
         String heading = "Add New Friends";
         TabHost.TabSpec mSpec = mTabHost.newTabSpec(heading);
         mSpec.setContent(R.id.tabAddNewFriends);
         mSpec.setIndicator(heading);
         mTabHost.addTab(mSpec);
 
+        userList2 = new ArrayList<>();
         // Initialize RecyclerView.
+        rvTabAddNewFriends = findViewById(R.id.rvTabAddNewFriends);
+        rvTabAddNewFriends.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setReverseLayout(true);
-        mLinearLayoutManager.setStackFromEnd(true);
+        //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        tabAddNewFriendsAdapter = new TabAddNewFriendsAdapter(userList2);
+        tabAddNewFriendsAdapter.setActivity(this);
+       /* mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);*/
+        rvTabAddNewFriends.setAdapter(tabAddNewFriendsAdapter);
         rvTabAddNewFriends.setLayoutManager(mLinearLayoutManager);
 
-
-        // Parser ==================================================================================
-        // New child entries
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        Log.d(TAG, "onCreate: " + mFirebaseDatabaseReference);
-        SnapshotParser<Post> parser = new SnapshotParser<Post>() {
+        mFirebaseDatabaseReference.child("users").addValueEventListener(new ValueEventListener() {
             @Override
-            public Post parseSnapshot(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "parseSnapshot: " + dataSnapshot);
-                Post post = dataSnapshot.getValue(Post.class);
-                return post;
-            }
-        };
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User currentUser = HomeScreenActivity.currentUser;
 
-        // Adapter Class ===========================================================================
-        DatabaseReference postsRef = mFirebaseDatabaseReference.child("posts");
-        FirebaseRecyclerOptions<Post> options = new FirebaseRecyclerOptions.Builder<Post>()
-                .setQuery(postsRef, parser)
-                .build();
+                List<String> friends = new ArrayList<String>();
+                if (currentUser.getFriends() != null) {
+                    friends.addAll(currentUser.getFriends());
+                }
 
+                userList2.clear();
+                tabAddNewFriendsAdapter.notifyDataSetChanged();
 
-        // class Adapter begins
-        mFirebaseAdapterTabAddNewFriends = new FirebaseRecyclerAdapter<Post, TabAddNewFriendsViewHolder>(options) {
-            @Override
-            public TabAddNewFriendsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-                return new TabAddNewFriendsViewHolder(inflater.inflate(R.layout.tab_add_new_friends_item, viewGroup, false));
-            }
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    User snapUser = userSnapshot.getValue(User.class);
+                    snapUser.setId(userSnapshot.getKey());
 
-            @Override
-            protected void onBindViewHolder(final TabAddNewFriendsViewHolder viewHolder, int position, Post post) {
-                Log.d(TAG, "onBindViewHolder: " + position);
-                viewHolder.lblFriendName_tab2.setText("");
-                viewHolder.imgBtnRemoveFriend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
+                    if (!currentUser.getId().equals(snapUser.getId())
+                            && !friends.contains(snapUser.getId())) {
+                        userList2.add(snapUser);
+                        tabAddNewFriendsAdapter.notifyDataSetChanged();
                     }
-                });
+                }
             }
-        };
-        rvTabAddNewFriends.setAdapter(mFirebaseAdapterTabAddNewFriends);
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
-    void initializeTab3(){
+    void initializeTab3() {
         String heading = "Requests Pending";
         TabHost.TabSpec mSpec = mTabHost.newTabSpec(heading);
         mSpec.setContent(R.id.tabRequestsPending);
         mSpec.setIndicator(heading);
         mTabHost.addTab(mSpec);
 
+        userList3 = new ArrayList<>();
         // Initialize RecyclerView.
+        rvTabRequestsPending = findViewById(R.id.rvTabRequestsPending);
+        rvTabRequestsPending.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setReverseLayout(true);
-        mLinearLayoutManager.setStackFromEnd(true);
+        //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        tabRequestsPendingAdapter = new TabRequestsPendingAdapter(userList3);
+        tabRequestsPendingAdapter.setActivity(this);
+       /* mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);*/
+        rvTabRequestsPending.setAdapter(tabRequestsPendingAdapter);
         rvTabRequestsPending.setLayoutManager(mLinearLayoutManager);
 
-
-        // Parser ==================================================================================
-        // New child entries
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        Log.d(TAG, "onCreate: " + mFirebaseDatabaseReference);
-        SnapshotParser<Post> parser = new SnapshotParser<Post>() {
+        mFirebaseDatabaseReference.child("users").addValueEventListener(new ValueEventListener() {
             @Override
-            public Post parseSnapshot(DataSnapshot dataSnapshot) {
-                Log.d(TAG+"X", "parseSnapshot: " + dataSnapshot);
-                Post post = dataSnapshot.getValue(Post.class);
-                return post;
-            }
-        };
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User currentUser = HomeScreenActivity.currentUser;
 
-        // Adapter Class ===========================================================================
-        DatabaseReference postsRef = mFirebaseDatabaseReference.child("posts");
-        FirebaseRecyclerOptions<Post> options = new FirebaseRecyclerOptions.Builder<Post>()
-                .setQuery(postsRef, parser)
-                .build();
+                List<String> requestFrom = new ArrayList<String>();
+                if (currentUser.getRequestFrom() != null) {
+                    requestFrom.addAll(currentUser.getRequestFrom());
+                }
+                List<String> requestTo = new ArrayList<String>();
+                if (currentUser.getRequestTo() != null) {
+                    requestTo.addAll(currentUser.getRequestTo());
+                }
 
+                userList3.clear();
+                tabRequestsPendingAdapter.notifyDataSetChanged();
 
-        // class Adapter begins
-        mFirebaseAdapterTabRequestsPending = new FirebaseRecyclerAdapter<Post, TabRequestsPending>(options) {
-            @Override
-            public TabRequestsPending onCreateViewHolder(ViewGroup viewGroup, int i) {
-                LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-                return new TabRequestsPending(inflater.inflate(R.layout.tab_request_pending_item, viewGroup, false));
-            }
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    User snapUser = userSnapshot.getValue(User.class);
+                    snapUser.setId(userSnapshot.getKey());
 
-            @Override
-            protected void onBindViewHolder(final TabRequestsPending viewHolder, int position, Post post) {
-                Log.d(TAG, "onBindViewHolder: " + position);
-                viewHolder.lblFriendName_tab3.setText("");
-                viewHolder.imgBtnAccept.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
+                    if ((!currentUser.getId().equals(snapUser.getId())) && (requestFrom.contains(snapUser.getId())
+                            || requestTo.contains(snapUser.getId()))) {
+                        if (requestFrom.contains(snapUser.getId())) {
+                            User senderUser = new User(snapUser);
+                            senderUser.setMarker("sender");
+                            userList3.add(senderUser);
+                            tabRequestsPendingAdapter.notifyDataSetChanged();
+                        }
+                        if (requestTo.contains(snapUser.getId())) {
+                            User receiverUser = new User(snapUser);
+                            receiverUser.setMarker("receiver");
+                            userList3.add(receiverUser);
+                            tabRequestsPendingAdapter.notifyDataSetChanged();
+                        }
                     }
-                });
-                viewHolder.imgBtnDecline.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
+                }
             }
-        };
-        rvTabRequestsPending.setAdapter(mFirebaseAdapterTabRequestsPending);
 
-    }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-    @Override
-    public void onPause() {
-        mFirebaseAdapterTabFriends.stopListening();
-        mFirebaseAdapterTabAddNewFriends.stopListening();
-        mFirebaseAdapterTabRequestsPending.stopListening();
-        super.onPause();
-    }
+            }
+        });
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mFirebaseAdapterTabFriends.startListening();
-        mFirebaseAdapterTabAddNewFriends.startListening();
-        mFirebaseAdapterTabRequestsPending.startListening();
-    }
-
-    // View Holders ================================================================================
-    // Holder Class >>> Tab 1 ======================================================================
-    // =============================================================================================
-    public static class TabFriendsViewHolder extends RecyclerView.ViewHolder {
-        TextView lblFriendName_tab1;
-        ImageButton imgBtnRemoveFriend;
-
-        public TabFriendsViewHolder(View v) {
-            super(v);
-            lblFriendName_tab1 = (TextView) itemView.findViewById(R.id.lblFriendName_tab1);
-            imgBtnRemoveFriend = (ImageButton) itemView.findViewById(R.id.imgBtnRemoveFriend);
-        }
-    }
-
-    // Holder Class >>> Tab 2 ======================================================================
-    // =============================================================================================
-    public static class TabAddNewFriendsViewHolder extends RecyclerView.ViewHolder {
-        TextView lblFriendName_tab2;
-        ImageButton imgBtnRemoveFriend;
-
-        public TabAddNewFriendsViewHolder(View v) {
-            super(v);
-            lblFriendName_tab2 = (TextView) itemView.findViewById(R.id.lblFriendName_tab2);
-            imgBtnRemoveFriend = (ImageButton) itemView.findViewById(R.id.imgBtnAddFriend);
-        }
-    }
-
-    // Holder Class >>> Tab 3 ======================================================================
-    // =============================================================================================
-    public static class TabRequestsPending extends RecyclerView.ViewHolder {
-        TextView lblFriendName_tab3;
-        ImageButton imgBtnAccept;
-        ImageButton imgBtnDecline;
-
-        public TabRequestsPending(View v) {
-            super(v);
-            lblFriendName_tab3 = (TextView) itemView.findViewById(R.id.lblFriendName_tab3);
-            imgBtnAccept = (ImageButton) itemView.findViewById(R.id.imgBtnAccept);
-            imgBtnDecline = (ImageButton) itemView.findViewById(R.id.imgBtnDecline);
-        }
     }
 }
