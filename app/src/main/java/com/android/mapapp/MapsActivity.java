@@ -218,7 +218,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(MapsActivity.this, "Tracking disabled.", Toast.LENGTH_SHORT).show();
             trackingEnabled = false;
             startFlag = false;
-            mLocationListener = null;
+            mLocationManager.removeUpdates(mLocationListener);
 
             if (prev != null) {
                 mMap.addMarker(new MarkerOptions().position(prev).title("End"));
