@@ -109,13 +109,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //checking for 1st instance
                 LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
 
-
                 if (trackingEnabled) {
-                    if (!startFlag)  //Not Set for the first time
-                    {
+                    if (!startFlag) { //Not Set for the first time
                         prev = current;
                         startFlag = true;
-                        mMap.addMarker(new MarkerOptions().position(current).title("End"));
+                        mMap.addMarker(new MarkerOptions().position(current).title("Start"));
 
                         builder = new LatLngBounds.Builder();
                     }
