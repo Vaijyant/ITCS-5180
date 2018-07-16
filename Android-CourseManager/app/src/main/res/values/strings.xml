@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Course Manager</string>
+    <string name="lblNotRegistered">Not Registered?</string>
+    <string name="lblSignUp">SignUp</string>
+    <string name="btnLogin">Login</string>
+    <string name="hintUserName">Username</string>
+    <string name="hintPassword">Password</string>
+    <string name="hintFirstName">First Name</string>
+    <string name="hintLastName">Last Name</string>
+    <string name="hintWebsite">Personal Website</string>
+    <string name="btnRegister">Register</string>
+    <string name="lblYourCourses">Your Courses</string>
+    <string name="lblTitle">Title</string>
+    <string name="hintEmail">Email</string>
+    <string name="lblChooseInstructor">Choose Instructor</string>
+    <string name="lblSchedule">Schedule</string>
+    <string name="lblTime">TIme</string>
+    <string name="hintRegPassword">Password (min  8 characters)</string>
+    <string name="lblDay">Day</string>
+    <string name="lblCreditHours">Credit hours</string>
+    <string name="rb1">1</string>
+    <string name="rb2">2</string>
+    <string name="rb3">3</string>
+    <string name="lblSemester">Semester</string>
+    <string name="btnReset">Reset</string>
+    <string name="btnCreate">Create</string>
+    <string name="actionHome">Home</string>
+    <string name="actionInstructors">Instructors</string>
+    <string name="actionAddInstructors">Add Instructors</string>
+    <string name="actionLogout">Logout</string>
+    <string name="actionExit">Exit</string>
+    <string name="lblColon">:</string>
+    <string name="lblNoIstructors">You haven’t added any instructor yet, please add at least one instructor to continue.</string>
+    <string name="btnSave">Save</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lblAvailableInstructors">Available Instructors</string>
+</resources>
