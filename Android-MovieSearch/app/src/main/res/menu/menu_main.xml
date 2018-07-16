@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* Homework  # Midterm
+* File Name # menu_main.xmlxml
+* Authors   # Vaijyant Tomar
+-->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/actionSortRating"
+        android:title="@string/actionSortRating"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/actionSortPopularity"
+        android:title="@string/actionSortPopularity"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/actionShowFavorites"
+        android:title="@string/actionShowFavorites"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/actionQuit"
+        android:title="@string/actionQuit"
+        app:showAsAction="collapseActionView" />
+</menu>
