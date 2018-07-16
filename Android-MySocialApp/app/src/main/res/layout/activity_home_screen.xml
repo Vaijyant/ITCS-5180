@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:background="@android:color/white"
+    tools:context="com.group08.mysocialapp.HomeScreenActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:background="@android:color/white"
+        android:elevation="7dp"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lblFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="firstName"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText,InefficientWeight" />
+
+            <ImageButton
+                android:id="@+id/imgBtnFriendsList"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@android:color/white"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/friends_list"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/lblPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
+        android:paddingTop="9dp"
+        android:text="@string/lblPosts"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPosts_hsa"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp">
+
+        <EditText
+            android:id="@+id/editPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <ImageButton
+            android:id="@+id/imgBtnPost"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@android:color/white"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/post" />
+    </LinearLayout>
+</LinearLayout>

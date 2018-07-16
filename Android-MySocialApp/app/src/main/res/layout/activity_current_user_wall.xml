@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:background="@android:color/white"
+    tools:context="com.group08.mysocialapp.CurrentUserWallActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:background="@android:color/white"
+        android:elevation="7dp"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/lblFirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="1"
+                    android:text="firstName"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,InefficientWeight" />
+
+                <ImageButton
+                    android:id="@+id/imgBtnEditProfile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_toEndOf="@+id/lblFirstName"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/edit_profile" />
+            </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/imgBtnFriendsList"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@android:color/white"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/friends_list"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPosts_cuw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp" />
+
+</LinearLayout>
